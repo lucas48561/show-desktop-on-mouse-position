@@ -1,0 +1,24 @@
+
+CoordMode, Mouse, Screen
+
+
+	MouseGetPos, MX, MY, WinUnderMouse
+	WinGetTitle, WinTitle, ahk_id %WinUnderMouse%
+	WinGetClass, WinClass, ahk_id %WinUnderMouse%
+	if (WinTitle = "Program Manager" or WinTitle = "" or WinClass = "WorkerW")
+	{
+
+	}
+	MouseMonitor := DllCall("user32\MonitorFromWindow", "Ptr", WinUnderMouse, "UInt", 2)
+	WinGet, WinList, List
+	Output := "Window titles checked:`n"
+	loop, % WinList
+	{
+		currentID := WinList%A_Index%
+		WinGetTitle, currentTitle, ahk_id %currentID%
+		Output .= currentTitle "`n"
+		if (MouseMonitor = DllCall("user32\MonitorFromWindow", "Ptr", WinList%A_Index%, "UInt", 2) and currentTitle != "")
+			WinMinimize, % "ahk_id" WinList%A_Index%
+	}
+
+return
